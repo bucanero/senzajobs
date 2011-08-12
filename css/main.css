@@ -1,0 +1,211 @@
+#toc {
+    position:   absolute;
+    left:       0px;
+    top:        55px;
+    height:     auto;
+    width:      145px;
+    padding:    0;
+    margin:     0;
+}
+
+#content {
+    position:   absolute;
+    left:       150px;
+    top:        55px;
+    width:      auto;
+}
+
+#title {
+    position:         absolute;
+    top:              0px;
+    left:             0px;
+    height:           35px;
+    padding:          0;
+    padding-top:      4px;
+    padding-bottom:   2px;
+    background-color: #BBF;
+    width:            100%;
+}
+
+/* Styles for mini-view */
+#miniToc {
+    position:   absolute;
+    left:       0px;
+    top:        30px;
+    height:     40px;
+    width:      100%;
+    padding:    0;
+    margin:     0;
+}
+
+#miniContent {
+    position:   absolute;
+    /*left:       150px; */
+    top:        45px;
+    height:     auto;
+    width:      100%;
+}
+
+#miniTitle {
+    position:         absolute;
+    top:              0px;
+    left:             0px;
+    height:           25px;
+    padding:          5px;
+    padding-top:      10px;
+    background-color: #BBF;
+    width:            100%;
+}
+
+body {
+  font-family:  sans-serif;
+  font-size:    9pt;
+  background-color:#F1F8FE;
+}
+
+table {
+    /*border:    none;*/
+    font-size: 9pt;
+    margin:    2px;
+	border:1px solid #00529C;
+	background-color:#FFFFFF;
+	/*border-bottom:none;*/	
+}
+
+td {
+  border:       1px solid;
+  border-color: #EEE;
+  padding:      3px;
+}
+
+tr.even {
+  background-color: transparent;
+}
+
+tr.odd {
+  background-color: #EEF;
+}
+
+tr.highlight {
+  background-color: #AFA;
+}
+
+th {
+  vertical-align:   top;
+  text-align:       left;
+  border:           0px none;
+  padding:          4px;
+  background-color: #BBF;
+}
+
+table.invisible {
+  border:         0px none;
+  border-spacing: 1px;
+  padding:        1px;
+  margin:         1px;
+}
+
+td.invisible {
+  border: 0px none;
+}
+
+img {
+  border:         0;
+  margin-top:     1px;
+  margin-bottom:  1px;
+  margin-left:    1px;
+  margin-right:   3px;
+  vertical-align: -30%;
+}
+
+h1 {
+  font-family:  sans-serif;
+  font-size:    1.8em;
+}
+
+h2 {
+  font-family:  sans-serif;
+  font-size:    1.6em;
+}
+
+h3 {
+  font-family:  sans-serif;
+  font-size:    1.4em;
+}
+
+a {
+  text-decoration:none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* --Login Classes-- */
+a.login {
+  text-decoration:  none;
+  font-size:        10pt;
+  font-family:      sans-serif;
+}
+
+a.login:hover {
+  text-decoration:  none;
+  background-color: #AAFFAA;
+}
+
+/* --Footer Classes-- */
+
+p.footer {
+  text-align: left;
+  font-size: 75%;
+}
+
+/* --Warning Classes-- */
+
+table.warning {
+  border:	2px solid red;
+}
+
+p.warning {
+  font-family:  sans-serif;
+  font-weight:  bold;
+  font-size:    1.25em;
+}
+
+p.byline {
+  font-family:  sans-serif;
+  font-size:    0.75em;
+  padding-top:  0;
+  margin-top:   0;
+}
+
+p.news {
+  padding:	2px;
+  margin:		2px;
+  border:		1px solid gray;
+  max-width: 600px;
+}
+
+ /* formval.css */
+.info   { color: black; background-color: transparent; font-weight: normal; }
+.warn   { color: rgb(120,0,0); background-color: transparent; font-weight: normal; }
+.error  { color: red; background-color: transparent; font-weight: bold }
+.boldtext  { color: black; background-color: transparent; font-weight: bold }
+
+.formtab TD      
+	  { padding: 0.2em; height: 2.5em; vertical-align: top; font-size: 90%; }
+
+
+/* checkboxes */
+.checkcl    { text-align: right; }
+.checkbox   { clear: right; float: right; margin: 0 0.5em; }
+.formtab2 TD      
+	  { padding: 0.2em; height: 2.5em; vertical-align: top;  } 
+	  
+.button{
+	 cursor:pointer;
+	 border-style:outset;
+	 width:200px;
+	 color:#333333;
+	 text-align:center
+}	  
