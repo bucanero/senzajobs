@@ -1,0 +1,31 @@
+.box_alert { 
+	margin:8px;
+	background: #FFBABA url('../images/exclamation.png') 16px 50% no-repeat; 
+	padding: 5px 20px 5px 45px; 
+	border-top: 2px solid #D8000C; 
+	border-bottom: 2px solid #D8000C;
+}
+
+.box_success { 
+	margin:8px;
+	background: #DFF2BF url('../images/accept.png') 16px 50% no-repeat; 
+	padding: 5px 20px 5px 45px; 
+	border-top: 2px solid #4F8A10; 
+	border-bottom: 2px solid #4F8A10;
+}
+
+.box_info { 
+	margin:8px;
+	background: #BDE5F8 url('../images/information.png') 16px 50% no-repeat;
+	padding: 5px 20px 5px 45px; 
+	border-top: 2px solid #00529B; 
+	border-bottom: 2px solid #00529B; 
+}
+
+.box_warning { 
+	margin:8px;
+	background: #FEEFB3 url('../images/warning.png') 16px 50% no-repeat;
+	padding: 5px 20px 5px 45px; 
+	border-top: 2px solid #9F6000; 
+	border-bottom: 2px solid #9F6000; 
+}

@@ -1,0 +1,202 @@
+/*This style sheet is used for most major browers - including NS4x*/
+/*The styles are commented for your convenience*/
+/*Test the style sheet in various browsers when changing any of the styles*/
+body {
+	background-color: White;
+	font: 12px Verdana, Geneva, Arial, Helvetica, sans-serif;
+	color: #666666;	
+	margin: 0px 0px 0px 0px;
+	border: none;
+}
+
+#maincontent a:link {
+	color:#0000FF;
+	font: 12px Arial, Verdana, Geneva, Helvetica, sans-serif;
+	text-decoration: none;}
+
+#maincontent a:visited {
+	color:#990000;
+	text-decoration: none;
+}
+
+#maincontent a:hover {
+	color: #2A3D3E;
+	text-decoration: none;
+}
+#maincontent a:active {
+	color:#9DBC7D;
+	text-decoration: none;
+}
+ #header {
+ 	background-color: White;
+ 	color: #CCCCCC;
+	/*use full url for NS4x compatibility*/
+ 	background-image:  url(../assets/header/headerback.jpg);
+	margin: 0px;
+ }
+ /*This specifies the background image for the header table 
+ - used this way ensures that NS4x will see the background image*/
+ .mybackground {
+  background-color: White;
+  color: #CCCCCC;
+  	/*use full url for NS4x compatibility*/
+background-image:  url(../assets/header/headerback.jpg);
+margin: 0px;
+ }
+ 
+ #mainTable {	
+  background-color: White;
+	/*/*/line-height: 1.5em; /* */
+	/*this definition gives a nice linespacing in modern browsers*/
+ }
+ #mainTable td {
+ 	padding: 0px;
+	/*Pads each table cell in the main table in modern browsers*/
+ }
+ #maincontent {
+ background-color: White;
+ vertical-align: top;
+ 	border-right: 2px dotted #D5E3E3;
+ 	font-size: 12px;	/*/*/font-size: 100%; /* */
+	/*12px set for ns 4100% set for modern browser*/	
+	 }
+	  
+ #maincontent li {
+ 
+ 	/*/*/margin: 0px 0px 6px 0px; /* */
+ }
+ /*change the width for the sidebar - right column - if so desired*/
+ #sidebar {
+ 	width: 200px;
+ 	font-size: 12px;	/*/*/font-size: 85%; /* */  
+	vertical-align: top;	
+ }
+ #navbar {
+ background: #D5E3E3;
+ 	/*use full url for NS4x compatibility*/
+ background-image:  url(../assets/background/cellback.gif);
+ background-repeat: repeat-y;
+ }
+ #navbar td {
+ background: #D5E3E3;
+ 	/*use full url for NS4x compatibility*/
+ background-image:  url(../assets/background/cellback.gif);
+ background-repeat: repeat-y;
+ }
+
+ #navbartable {
+ margin-top: 50px;
+ }
+  
+ #footer {
+ 	background-color: #669999;
+ 	color: White;
+	padding: 5px 5px;
+}
+#footer a:link {
+	color: White;
+	font: 12px Arial, Verdana, Geneva, Helvetica, sans-serif;
+	text-decoration: underline;
+}
+
+#footer a:visited {
+	color: White;
+	font: 12px Arial, Verdana, Geneva, Helvetica, sans-serif;
+	text-decoration: underline;
+}
+
+#footer a:hover {
+	color: #2A3D3E;
+	font: 12px Arial, Verdana, Geneva, Helvetica, sans-serif;
+	text-decoration: none;
+}
+#footer a:active {
+	color: White;
+	font: 12px Arial, Verdana, Geneva, Helvetica, sans-serif;
+	text-decoration: underline;
+}
+
+ #copyright {
+ 	background-color: White;
+	font-size: 10px;
+	/*/*/font-size: 160%; /* */  
+ 	color: #CC6666;
+ padding-top: 15px;
+ }
+  
+ td, p, ul,ol {
+ font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+ font-size: 12px;
+ }
+ 
+th{
+	color: #000000;
+	font-size: 13px;
+ }
+
+ 
+tr.highlight {
+  background-color: #AFA;
+}
+ 
+ #maincontent ul {
+ 	/*/*/padding-left: 1em;
+ 	margin-left: 2em;
+ 	list-style-type: circle; /* */
+	/*hide the list-style definition from NS4  can cause problems */
+ }
+ 
+ .button{
+	 cursor:pointer;
+	 border-style:outset;
+	 width:100px;
+	 color: #476B6B;
+	 text-align:center
+ }
+ 
+ h1 {
+ 	color: #568585;
+	font-size: 14px;	
+ }
+ 
+ h2{
+ 	color: #CC6666;
+	font-size:13px;
+ }
+ 
+h3{
+ 	color: #476B6B;
+	font-size: 12px;
+ }
+h4 {
+ 	color: #996666;
+	font-size: 13px;
+ }
+
+.required {color: #FF0000}
+.subheading {color: #66CCCC; font-style:italic}
+ 
+ /* formval.css */
+.info   { color: black; background-color: transparent; font-weight: normal; }
+.warn   { color: rgb(120,0,0); background-color: transparent; font-weight: normal; }
+.error  { color: red; background-color: transparent; font-weight: bold }
+
+.formtab TD      
+	  { padding: 0.2em; height: 2.5em; vertical-align: top; font-size: 90%; }
+
+
+/* checkboxes */
+.checkcl    { text-align: right; }
+.checkbox   { clear: right; float: right; margin: 0 0.5em; }
+.formtab2 TD      
+	  { padding: 0.2em; height: 2.5em; vertical-align: top;  } 
+ 
+ /*Rounded corners */
+div#nifty{ margin: 0 10%;background: #9BD1FA}
+b.rtop, b.rbottom{display:block;background: #FFF}
+b.rtop b, b.rbottom b{display:block;height: 1px;
+    overflow: hidden; background: #9BD1FA}
+b.r1{margin: 0 5px}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
