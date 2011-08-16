@@ -37,12 +37,12 @@ include_once('includes/functions.php');
 Con un dedicado staff de especialistas en la b&uacute;squeda, evaluaci&oacute;n y selecci&oacute;n de recursos humanos, <b><?php echo WEBSITE_NAME; ?></b> ofrece a las empresas un servicio de excelencia a costos competitivos y con garant&iacute;a de satisfacci&oacute;n. Y,  a los postulantes, una  atenci&oacute;n personalizada y orientaci&oacute;n precisa para canalizar sus competencias y experiencia en la direcci&oacute;n exacta. 
 <br/><br/>
 <b><?php echo WEBSITE_NAME; ?></b><br/>
-Estanislao L&oacute;pez e Ituzaing&oacute;<br/>
-Shopping Pilar Point, Pilar, Buenos Aires  -  Argentina
+Callao 123456<br/>
+Buenos Aires  -  Argentina
 <br/><br/>
-<i>Tel:</i> 011-15-3011-2080 <BR />
+<i>Tel:</i> 011-1234-5678 <BR />
 <i>E-mail:</i> <a href="mailto:<?php echo WEBSITE_EMAIL; ?>"><?php echo WEBSITE_EMAIL; ?></a><br/>
-<i>Directora:</i> <?php echo WEBSITE_CONTACT; ?>
+<i>Contacto:</i> <?php echo WEBSITE_CONTACT; ?>
 </p>
 </div>
 </div>

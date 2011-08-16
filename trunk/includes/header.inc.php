@@ -15,7 +15,7 @@
 </head>
 <body>
 <div style=" margin-left:17%;">
-<img src="images/logo_datio.jpg" height="140" width="450" alt="logo" />
+<img src="images/logo_small.gif" height="90" width="350" alt="logo" />
 <br/>
 </div>
 
