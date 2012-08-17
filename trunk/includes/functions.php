@@ -335,18 +335,16 @@ function EmailExists($email) {
 //sendmail
 function sendemail($commentinfo,$support_email='',$bcc='',$notify_owner_email,$subject)
 {
-	$text= $commentinfo;
-	$text=stripslashes($text);
-	$emailm=$text; 
-	$headers = "From: $support_email\n"; 
+	$emailm = stripslashes($commentinfo);
+	$headers = 'From: "'. WEBSITE_NAME ."\" <$support_email>\n"; 
 	$headers .= "Return-Path: <$support_email>\n"; 
 	$headers .= "X-Sender: <$support_email>\n"; 
 	$headers .= "X-Mailer: SenzaJobs Site\n"; //mailer 
+	$headers .= "X-Mailer-URL: ". WEBSITE_URL ."\n";
 	$headers .= "X-Priority: 3\n"; //1 UrgentMessage, 3 Medium 
 	if (!empty($bcc))
 		$headers .= "Bcc: $bcc\r\n";
 	return mail($notify_owner_email,$subject,$emailm,$headers);
-//	return FALSE;
 }
 
 ?>
