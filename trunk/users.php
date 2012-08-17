@@ -125,13 +125,13 @@ if(isset($_POST["submit"])){
 	if($_POST["submit"]=="Listar") {
 		switch($_POST["users"]){
 			case 'U':
-				$querystr="SELECT userid,concat_ws(' ',fname,mname,sname) as taifauser,loginname,email,dateregistered,admin,`status`,usercategory,loginname,tipodoc
+				$querystr="SELECT userid,concat_ws(' ',fname,mname,sname) as taifauser,loginname,email,dateregistered,admin,`status`,usercategory,loginname
 						FROM users
 						ORDER BY taifauser";
 				$results=query($querystr,$conn);
 				//check if data is returned
 				echo "<table border=\"0\" width=\"100%\">";  		
-				echo "<tr class=\"boldtext\"><td>Nombre</td><td>Documento</td><td>Fecha</td><td width=\"110\">Acciones</td></tr>";
+				echo "<tr class=\"boldtext\"><td>Nombre</td><td>Usuario</td><td>Fecha</td><td width=\"110\">Acciones</td></tr>";
 				while ($users = fetch_object($results)){
 					//alternate row colour
 					$j++;
@@ -146,7 +146,7 @@ if(isset($_POST["submit"])){
 					else
 						echo "$users->usercategory$users->status";
 					echo ".png\" alt=\"usuario\" />$users->taifauser</td>
-						<td align=\"left\">$users->tipodoc $users->loginname</td>
+						<td align=\"left\">$users->loginname</td>
 						<td align=\"left\">$users->dateregistered</td>
 						<td align=\"left\">";
 					if ($users->usercategory == 'A')
