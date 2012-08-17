@@ -35,7 +35,7 @@ $pass = md5($newpass);
 		$user = fetch_object($results);
 		$email = $user->email;
 		$usernames = $user->usernames;
-		if(num_rows($results)){
+		if(num_rows($results) == 1){
 			$sql="UPDATE users SET pass='$pass' WHERE loginname=$loginname";
 			$results=query($sql,$conn);
 			$msg[0]="No se ha encontrado el usuario.";
@@ -100,11 +100,11 @@ function validateOnSubmit() {
     <tr>
       <td colspan="2">Olvid&oacute; su contrase&ntilde;a?
         <hr>
-        Ingrese su n&uacute;mero de documento y le enviaremos una nueva contrase&ntilde;a a su correo electr&oacute;nico.
+        Ingrese su e-mail y le enviaremos una nueva contrase&ntilde;a a su correo electr&oacute;nico.
         </td>
       </tr>
     <tr>
-      <td>DNI:</td>
+      <td>E-Mail:</td>
       <td>
         <input name="loginname" type="text" id="loginname" value=""/>
         <input type="submit" name="submit" value="Enviar Clave" onclick="return validateOnSubmit();" class="button"/>

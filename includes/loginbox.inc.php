@@ -1,5 +1,5 @@
 <div id="column-right" style="float:right; margin-top:-110px">
-<h2 class="Box">Profesionales Registrados</h2>
+<h2 class="Box">Usuarios Registrados</h2>
 
 <?php
 
@@ -24,7 +24,6 @@ E-Mail:<br />
 <br />
 Contrase&ntilde;a:<br />
 <input type="password" value="" name="password" id="password" size="28" />
-<input type="hidden" name="member" value="A" />
 <input type="submit" name="submit" class="button" value="Login" />
 </form>
 <hr style="color:#f2f2f2;" noshade="noshade"/>
@@ -34,6 +33,11 @@ Contrase&ntilde;a:<br />
 <h2 class="title-bar">Profesionales no registrados</h2>
 <div class="BoxLogin">
 <p>Para ingresar su CV, haga <a href="register.php?member=A">click aqu&iacute;</a>.</p>
+</div>
+
+<h2 class="title-bar">Empresas no registradas</h2>
+<div class="BoxLogin">
+<p>Para publicar sus b&uacute;squedas, haga <a href="register.php?member=E">click aqu&iacute;</a>.</p>
 </div>
 
 <?php } ?>
