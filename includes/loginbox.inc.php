@@ -19,7 +19,7 @@ if(isset($_SESSION["userid"])) {
 
 <div class="BoxLogin">
 <form action="login.php" method="post" enctype="multipart/form-data" name="login" id="login">
-DNI:<br />
+E-Mail:<br />
 <input type="text" value="" name="username" id="username" size="28" />
 <br />
 Contrase&ntilde;a:<br />

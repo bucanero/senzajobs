@@ -150,12 +150,12 @@ function loadHTMLPost(URL, destination, button){
 <form action="account.php" method="post" name="account" id="account" enctype="multipart/form-data">
 <table border="0" cellpadding="0">
 <tr>
-<td>Documento</td><td>
+<td>Usuario</td><td>
 <?php
-	$querystr="SELECT tipodoc, loginname, email FROM users WHERE userid=$_SESSION[userid]";
+	$querystr="SELECT loginname, email FROM users WHERE userid=$_SESSION[userid]";
 	$results=query($querystr,$conn);
 	$usrdata = fetch_object($results);
-	echo "$usrdata->tipodoc $usrdata->loginname";
+	echo strtolower($usrdata->loginname);
 ?>
 </td></tr>
 <tr>

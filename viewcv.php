@@ -26,15 +26,13 @@ SignedIn();
 $sql="SELECT applicant.id,applicant.cvviews,applicant.applicantid,concat_ws(' ',salutation,applicant.fname,applicant.mname,applicant.surname) AS applicant,
 		applicant.sex,applicant.mstatus,applicant.dob,applicant.hbox,applicant.htown,
 		applicant.hzip_postal,applicant.hcountry,applicant.hphone,applicant.hmobile,applicant.hemail,applicant.obox,
-		applicant.otown,applicant.ozip_postal,applicant.ocountry,applicant.ophone,applicant.omobile, applicant.oemail,applicant.qualsumm, applicant.driverlic, 
-    usr.tipodoc, usr.loginname AS nrodoc,
+		applicant.otown,applicant.ozip_postal,applicant.ocountry,applicant.ophone,applicant.omobile, applicant.oemail,applicant.qualsumm, applicant.driverlic, applicant.tipodoc, applicant.documento,
     country.country AS ctoforigin,nationality.country AS nationality,citizenship.country AS citizenship, dircountry.country AS chomeadd
 	FROM applicant
 		Left Join countries AS country ON applicant.ctoforigin = country.countryid
 		Left Join countries AS nationality ON applicant.nationality = nationality.countryid
 		Left Join countries AS citizenship ON applicant.citizenship = citizenship.countryid
 		Left Join countries AS dircountry ON applicant.hcountry = dircountry.countryid
-		Left Join users AS usr ON applicant.applicantid = usr.userid
 	WHERE applicant.applicantid = $cvid";
 $results=query($sql,$conn);
 $applicant = fetch_object($results);
@@ -77,7 +75,7 @@ free_result($viewresults);
    <?php 
    	$sexo = ($applicant->sex == 'M') ? 'Masculino' : 'Femenino';
    	echo "<b>Fecha de Nacimiento		:</b> $applicant->dob <br>
-		<b>$applicant->tipodoc 			:</b> $applicant->nrodoc <br>
+		<b>Documento 					:</b> $applicant->tipodoc $applicant->documento <br>
 		<b>Sexo							:</b> $sexo <br>
 		<b>Estado Civil</b> 			:</b> $applicant->mstatus <br>
 		<b>Registro de Conducir</b>		:</b> $applicant->driverlic <br>
