@@ -156,7 +156,7 @@ var dest;
 
 function ConfirmPass(){
 	if (document.forms.register.confpass.value!=document.forms.register.pass.value){
-		alert("Passwords do not match!");
+		alert("Las claves ingresadas no coinciden.");
 	}	
 };
 
