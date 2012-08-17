@@ -41,6 +41,8 @@ if(isset($_POST["submit"])){
 		$nationality =(!empty($_POST["nationality"])) ? $_POST["nationality"] : 'NULL';
 		$citizenship =(!empty($_POST["citizenship"])) ? $_POST["citizenship"] : 'NULL';
 		$ctoforigin =(!empty($_POST["ctoforigin"])) ? $_POST["ctoforigin"] : 'NULL';
+		$documento = !empty($_POST["documento"]) ? "'" . $_POST["documento"] . "'" : 'NULL';
+		$tipodoc = !empty($_POST["tipodoc"]) ? "'" . $_POST["tipodoc"] . "'" : 'NULL';
 		$driverlic = !empty($_POST["driverlic"]) ? "'" . $_POST["driverlic"] . "'" : 'NULL';
 		$hbox = !empty($_POST["hbox"]) ? "'" . $_POST["hbox"] . "'" : 'NULL';
 		$htown = !empty($_POST["htown"]) ? "'" . $_POST["htown"] . "'" : 'NULL';
@@ -60,9 +62,9 @@ if(isset($_POST["submit"])){
 	switch($_POST["submit"]){
 	case "Guardar":
 		$sql="INSERT INTO applicant (salutation,surname,mname,fname,sex,mstatus,dob,nationality,citizenship,ctoforigin,hbox,htown,hzip_postal,
-				hcountry,hphone,hmobile,hemail,obox,otown,ozip_postal,ocountry,ophone,omobile,oemail,driverlic)
+				hcountry,hphone,hmobile,hemail,obox,otown,ozip_postal,ocountry,ophone,omobile,oemail,driverlic,tipodoc,documento)
 			VALUES($salutation,$surname,$mname,$fname,$sex,$dob,$nationality,$citizenship,$ctoforigin,$hbox,$htown,$hzip_postal,
-				$hcountry,$hphone,$hmobile,$hemail,$obox,$otown,$ozip_postal,$ocountry,$ophone,$omobile,$oemail,$driverlic)";
+				$hcountry,$hphone,$hmobile,$hemail,$obox,$otown,$ozip_postal,$ocountry,$ophone,$omobile,$oemail,$driverlic,$tipodoc,$documento)";
 		$results=query($sql,$conn);
 		$msg[0]="No se ha podido agregar el registro.";
 		$msg[1]="Registro agregado correctamente.";
@@ -74,7 +76,8 @@ if(isset($_POST["submit"])){
 				sex=$sex,mstatus=$mstatus,dob=$dob,nationality=$nationality,citizenship=$citizenship,ctoforigin=$ctoforigin,
 				hbox=$hbox,htown=$htown,hzip_postal=$hzip_postal,hcountry=$hcountry,hphone=$hphone,
 				hmobile=$hmobile,hemail=$hemail,obox=$obox,otown=$otown,ozip_postal=$ozip_postal,
-				ocountry=$ocountry,ophone=$ophone,omobile=$omobile,oemail=$oemail,driverlic=$driverlic
+				ocountry=$ocountry,ophone=$ophone,omobile=$omobile,oemail=$oemail,
+				driverlic=$driverlic,tipodoc=$tipodoc,documento=$documento
 			WHERE id=$id";
 		$results=query($sql,$conn);
 		$msg[0]="No se ha podido actualizar el registro.";
@@ -117,6 +120,7 @@ function validateOnSubmit() {
     // set to the first one in error.
 	if (!validatePresent (document.forms.personaldata.surname,'inf_surname')) errs += 1;
 	if (!validatePresent (document.forms.personaldata.fname,'inf_fname')) errs += 1;
+	if (!validateNum (document.forms.personaldata.documento,'inf_documento',true)) errs += 1;
 	if (!validateSelect (document.forms.personaldata.hcountry,'inf_hcountry',1)) errs += 1;
 	if (!validateEmail (document.forms.personaldata.hemail,'inf_hemail',1)) errs += 1;
 	if (!validatePresent (document.forms.personaldata.hbox,'inf_hbox')) errs += 1;
@@ -227,6 +231,24 @@ function validateOnSubmit() {
         <?php populate_select("countries","countryid","country",$applicant->ctoforigin); ?>
       </select></td>
     </tr>
+    <tr>
+      <td>Tipo/Nro. de Documento</td>
+      <td>
+
+        <select name="tipodoc" id="tipodoc">
+          <option value="">seleccione</option>
+<?php
+	$salarr = array("DNI", "LE", "LC", "CI", "EXT");
+	foreach($salarr as $sal) {
+		echo "<option value=\"$sal\"";
+		if($applicant->tipodoc==$sal)
+			echo ' selected';
+		echo ">$sal</option>";
+	}
+?>
+		</select>
+		<input name="documento" type="text" id="documento" value="<?php echo $applicant->documento; ?>"/><div id="inf_documento" class="warn">*</div></td>
+      </tr>
     <tr>
       <td>Registro de Conducir</td>
       <td><select name="driverlic" id="driverlic">

@@ -19,7 +19,7 @@ if(isset($_GET["submit"])) $_POST["submit"]=$_GET["submit"];
 if (isset($_POST["submit"])){
 	switch ($_POST["submit"]){
 		case 'Login':
-			$username = $_POST["username"];
+			$username = strtoupper($_POST["username"]);
 			$sql = "SELECT userid,admin,email,usercategory,status,concat_ws(' ', fname, sname) AS user, pass FROM users WHERE loginname = '$username'";
 			//check if user exist
 			$results = mysql_query($sql,$conn);
@@ -29,15 +29,15 @@ if (isset($_POST["submit"])){
 			//check if password is same
 			$user = mysql_fetch_object($results);
 			if ($user==0) 
-				die("<center><font color=red>Invalid User.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
+				die("<center><font color=red>El Usuario especificado no existe.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
 			if ($user->usercategory!==$_POST["member"]){
 				if ($user->admin!=='1') 
 					die("<center><font color=red>Invalid User Category.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
 			}					
 			if ($user->status!=='A')
-				die("<center><font color=red>Account not active yet.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
+				die("<center><font color=red>La cuenta todav&iacute;a no ha sido Activada.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
 			if ($user->pass!=md5($_POST["password"])) 
-				die("<center><font color=red>Invalid Password.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
+				die("<center><font color=red>La contrase&ntilde;a es incorrecta.<a href=login.php?member=$_POST[member]><br>Please click here to go back.</a></font><center>");
 			//set session variables.
 			$_SESSION["user"]=$user->user;
 			$_SESSION["userid"]=$user->userid;

@@ -41,34 +41,31 @@ if(isset($_GET["action"])){
 
 if(isset($_POST["submit"])){
 	if($_POST["submit"]=="Registrarse" || $_POST["submit"]=="Edit"){
-		$userid =$_POST["userid"];
-		$fname = !empty($_POST["fname"]) ? "'" . $_POST["fname"] . "'" : 'NULL';
-		$mname = !empty($_POST["mname"]) ? "'" . $_POST["mname"] . "'" : 'NULL';
-		$sname = !empty($_POST["sname"]) ? "'" . $_POST["sname"] . "'" : 'NULL';
-		$contact = $_POST["fname"] .' '. $_POST["mname"] .' '. $_POST["sname"];
-		// here we encrypt the password and add slashes if needed
-		$pass = "'" . md5($_POST['pass']) . "'";
-		$loginname = "'" . $_POST['loginname'] . "'";
-		$tipodoc = "'" . $_POST['tipodoc'] . "'";
-		if (!get_magic_quotes_gpc()) {
-			$pass = "'" . addslashes(md5($_POST['pass'])) . "'";
-			$loginname = "'" . addslashes($_POST['loginname']) . "'";
-		}
-		$email = $_POST["email"];
+		$userid		= $_POST["userid"];
+		$fname		= !empty($_POST["fname"]) ? "'" . $_POST["fname"] . "'" : 'NULL';
+		$mname		= !empty($_POST["mname"]) ? "'" . $_POST["mname"] . "'" : 'NULL';
+		$sname		= !empty($_POST["sname"]) ? "'" . $_POST["sname"] . "'" : 'NULL';
+		$contact	= $_POST["fname"] .' '. $_POST["mname"] .' '. $_POST["sname"];
+		$email		= $_POST["email"];
 		$dateregistered = !empty($_POST["dateregistered"]) ? "'" . $_POST["dateregistered"] . "'" : 'NULL';
-		$admin = !empty($_POST["admin"]) ? "'" . $_POST["admin"] . "'" : 'NULL';
-		$status = !empty($_POST["status"]) ? "'" . $_POST["status"] . "'" : 'NULL';
+//		$admin = !empty($_POST["admin"]) ? "'" . $_POST["admin"] . "'" : 'NULL';
+		$status = !empty($_POST["status"]) ? "'" . $_POST["status"] . "'" : "'D'";
 		$usercategory = $_POST["member"]=="E" ? "E" : "A";
 
-		//checks for passwords mismatch and if loginame already exists
+		// here we encrypt the password and add slashes if needed
 		if (!get_magic_quotes_gpc()) {
-			$_POST['loginname'] = addslashes($_POST['loginname']);
+			$pass = "'" . addslashes(md5($_POST['pass'])) . "'";
+			$loginname = "'" . addslashes(strtoupper($email)) . "'";
+		} else {
+			$pass = "'" . md5($_POST['pass']) . "'";
+			$loginname	= "'" . strtoupper($email) . "'";
 		}
-	
+
+		//checks for passwords mismatch and if loginame already exists
 		// checks if the username is in use
 		//if the name exists loginname exists
-		if (UserExists($_POST['loginname'])) {
-			$resmsg = AddErrorBox("El usuario $_POST[tipodoc] $_POST[loginname] ya existe.");
+		if (UserExists(strtoupper($email))) {
+			$resmsg = AddErrorBox("El usuario $email ya existe.");
 			unset($_POST["submit"]);
 		}
 		
@@ -82,8 +79,8 @@ if(isset($_POST["submit"])){
 	
 	switch($_POST["submit"]){
 	case "Registrarse":
-		$sql="INSERT INTO users (fname,mname,sname,loginname,pass,email,dateregistered,`status`,usercategory,tipodoc)
-				VALUES($fname,$mname,$sname,$loginname,$pass,'$email',now(),$status,'$usercategory',$tipodoc)";
+		$sql="INSERT INTO users (fname,mname,sname,loginname,pass,email,dateregistered,`status`,usercategory)
+				VALUES($fname,$mname,$sname,$loginname,$pass,'$email',now(),$status,'$usercategory')";
 		$results=query($sql,$conn);
 		$msg[0]="No se ha podido crear la cuenta.";
 		$msg[1]="Su cuenta ha sido creada correctamente. <a href=\"index.php\">Click aqui</a>.";
@@ -171,7 +168,6 @@ function validateOnSubmit() {
     if (!validateEmail (document.forms.register.email,'inf_email',true)) errs += 1; 
 	if (!validatePresent (document.forms.register.confpass,'inf_confpass')) errs += 1;
 	if (!validatePresent (document.forms.register.pass,'inf_pass')) errs += 1;
-	if (!validateNum (document.forms.register.loginname,'inf_loginname',true)) errs += 1;
 	if (!validatePresent (document.forms.register.fname,'inf_fname')) errs += 1;	
 	if (!validatePresent (document.forms.register.sname,'inf_sname')) errs += 1;	
 
@@ -233,19 +229,8 @@ function loadHTMLPost(URL, destination, button){
 <p class="Lastnews">
 <form action="register.php" method="post" name="register" id="register" enctype="multipart/form-data">
 <input type="hidden" name="member" value="<?php echo $_GET["member"]; ?>" />
-<input type="hidden" name="status" value="A" />
+
 <table border="0" align="center">
-    <tr>
-      <td>Tipo/Nro. de Documento</td>
-      <td>
-        <select name="tipodoc" id="tipodoc">
-			<option value="DNI" selected>DNI</option>
-			<option value="LE" >LE</option>
-			<option value="LC" >LC</option>
-			<option value="CI" >CI</option>
-		</select>
-		<input name="loginname" type="text" id="loginname" value="<?php echo $user->loginname; ?>" onblur="loadHTMLPost('ajaxfunctions.php','inf_loginname','CheckLoginname')"/><div id="inf_loginname" class="warn">*</div></td>
-      </tr>
     <tr>
       <td>Apellido</td>
       <td>
@@ -263,6 +248,11 @@ function loadHTMLPost(URL, destination, button){
       <td><input name="mname" type="text" id="mname" value="<?php echo $user->mname; ?>"/></td>
     </tr>
     <tr>
+      <td> Email</td>
+      <td>
+        <input name="email" type="text" id="email" value="<?php echo isset($_POST["email"]) ? $_POST["email"] : $user->email; ?>" width="200" onblur="loadHTMLPost('ajaxfunctions.php','inf_email','CheckLoginname')"/><div id="inf_email" class="warn">* </div> </td>
+      </tr>
+    <tr>
       <td>Contrase&ntilde;a</td>
       <td>
         <input name="pass" type="password" id="pass" value="<?php echo $user->pass; ?>"/><div id="inf_pass" class="warn">* </div></td>
@@ -271,11 +261,6 @@ function loadHTMLPost(URL, destination, button){
       <td>Confirmar Contrase&ntilde;a </td>
       <td>
         <input name="confpass" type="password" id="confpass" value="<?php echo $user->pass; ?>" onBlur="ConfirmPass()"/><div id="inf_confpass" class="warn">* </div></td>
-      </tr>
-    <tr>
-      <td> Email</td>
-      <td>
-        <input name="email" type="text" id="email" value="<?php echo isset($_POST["email"]) ? $_POST["email"] : $user->email; ?>" width="200"/><div id="inf_email" class="warn">* </div> </td>
       </tr>
     <tr align="center">
       <td colspan="2"><input type="submit" name="submit" value="<?php echo isset($_GET["search"]) ? "Edit" : "Registrarse"; ?>" onclick="return validateOnSubmit();" class="button"/>
