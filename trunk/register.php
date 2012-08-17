@@ -191,7 +191,7 @@ function processStateChange(){
 
 function loadHTMLPost(URL, destination, button){
     dest = destination;
-	loginname = document.getElementById('loginname').value;
+	loginname = document.getElementById('email').value;	
 	var str ='loginname='+loginname+'&button='+button;
 		
 	if (window.XMLHttpRequest){
