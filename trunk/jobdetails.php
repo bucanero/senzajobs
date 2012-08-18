@@ -51,60 +51,77 @@ $jobs = fetch_object($results);
 $today = getdate();
 ?>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title><?php echo WEBSITE_NAME; ?> :: B&uacute;squeda Laboral</title>
-<script language="JavaScript" src="js/highlight.js" type="text/javascript"></script>
-<link href="css/main.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" type="text/css" href="css/messagebox.css" />
-<?php headericon(); ?>
-</head>
-<body>
+<?php ShowHeader(WEBSITE_NAME ." :: Nosotros"); ?>
+
+<?php ShowDropMenu(); ?>
+
+</div>
+
+<div id="content" >
+
+<div id="contentdiv">
+
+<div id="searchtable" >
+<img src="images/people.jpg" alt="people" width="575" height="100" border="0" />
+</div>
+
+
+<div id="list">
+
+<h2 class="title-bar"><?php echo $jobs->jobtitle; ?></h2>
+<p class="Lastnews" align="justify">
+
 <?php if (isset($resmsg)) echo $resmsg; ?>
 <form action="jobdetails.php" method="POST"  name="jobdetails" id="jobdetails" enctype="multipart/form-data">
-<div align="left">
-<table border="0" align="left">
-  <tr><td colspan="7"><input name="jobid" type="hidden" value="<?php echo $jobs->jobid; ?>">
-    <input type="hidden" name="employersemail" value="<?php echo $jobs->email; ?>">
+<input type="hidden" name="jobid" value="<?php echo $jobs->jobid; ?>" />
+<input type="hidden" name="employersemail" value="<?php echo $jobs->email; ?>" />
+<table border="0" class="Box-table">
+  <tr><td><b>Detalles</b></td><td>
   <?php 
 	$empresa = (!empty($jobs->alias)) ? $jobs->alias : $jobs->organization;
-  	echo "<h3>$jobs->jobtitle</h3>
-		<span class=\"boldtext\">Categor&iacute;a: </span> $jobs->jobcategory <br>
-		<span class=\"boldtext\">Ciudad: </span> $jobs->city <br>
-		<span class=\"boldtext\">Pa&iacute;s: </span> $jobs->country <br>
-		<span class=\"boldtext\">Empresa: </span> $empresa <br><br>
-		<span class=\"boldtext\">Resumen</span><br>".
-		stripslashes($jobs->summary)."<br><br>
-		<span class=\"boldtext\">Descripcion</span><br>".
-		stripslashes($jobs->description)."<br><br>
-		<span class=\"boldtext\">Requerimientos</span><br>".
-		stripslashes($jobs->requirements)."<br><br>
-		<span class=\"boldtext\">Nivel de Experiencia: </span> $jobs->careerlevel <br><br>
-		<span class=\"boldtext\">Datos de Contacto</span><br>";
+  	echo "<b>Categor&iacute;a: </b> $jobs->jobcategory <br>
+		<b>Ciudad: </b> $jobs->city <br>
+		<b>Pa&iacute;s: </b> $jobs->country <br>
+		<b>Empresa: </b> $empresa <br>
+		<b>Nivel de Experiencia: </b> $jobs->careerlevel <br>
+		<b>Fecha de publicaci&oacute;n: </b>". dateconvert($jobs->dateposted,2) ."<br>
+		<b>Fecha de cierre: </b>". dateconvert($jobs->dateclosing,2) ."</td></tr>
+	<tr><td><b>Resumen</b></td><td>".
+		stripslashes($jobs->summary)."</td></tr>
+	<tr><td><b>Descripci&oacute;n</b></td><td>".
+		stripslashes($jobs->description)."</td></tr>
+	<tr><td><b>Requerimientos</b></td><td>".
+		stripslashes($jobs->requirements)."</td></tr>
+	<tr><td><b>Datos de Contacto</b></td><td>";
 	if ($jobs->contactinfo != '') {
 		echo stripslashes($jobs->contactinfo);
 	} else {
-		echo "<span class=\"boldtext\">Contacto: </span> $jobs->contact<br>
-			<span class=\"boldtext\">Telefono: </span> $jobs->telephone<br>
-			<span class=\"boldtext\">Fax: </span> $jobs->fax<br>
-			<span class=\"boldtext\">E-mail: </span> <a href=\"mailto:$jobs->email\">$jobs->email</a><br>
-			<span class=\"boldtext\">Sitio Web: </span> <a href=\"$jobs->website\">$jobs->website</a>";		
+		echo "<b>Contacto: </b> $jobs->contact<br>
+			<b>Telefono: </b> $jobs->telephone<br>
+			<b>Fax: </b> $jobs->fax<br>
+			<b>E-mail: </b> <a href=\"mailto:$jobs->email\">$jobs->email</a><br>
+			<b>Sitio Web: </b> <a href=\"$jobs->website\">$jobs->website</a>";		
 	}
-	echo "<br><br><span class=\"boldtext\">Fecha de publicaci&oacute;n: </span>". dateconvert($jobs->dateposted,2) ."<br><span class=\"boldtext\">Fecha de cierre: </span>". dateconvert($jobs->dateclosing,2);
-
-	if(isset($_SESSION["userid"]) && $_SESSION["usercategory"]!=='E')
-		echo "<span class=\"boldtext\"><input type=\"submit\" name=\"submit\" value=\"Postularse\"></span><br>";
-	else	
-		echo AddInformationBox('Para postularse online, por favor asegurese de estar <a href="register.php?member=A">registrado</a>.');
 ?>
 	</td>
   </tr>
- <tr><td colspan="7" align="center"><?php footer(); ?> <? echo WEBSITE_NAME; ?></td>
- </tr>
 </table>
-</div>
+
+<?php
+if(isset($_SESSION["userid"]) && !isEmployer())
+	echo '<input type="submit" name="submit" value="Postularse" class="button" />';
+else	
+	echo AddInformationBox('Para postularse online, por favor asegurese de estar <a href="register.php?member=A">registrado</a>.');
+?>
+
 </form>
-</body>
-</html>
+
+</p>
+</div>
+</div>
+
+<?php ShowLoginBox(); ?>
+
+</div>
+
+<?php ShowFooter(); ?>

@@ -136,7 +136,7 @@ if(isset($_POST["submit"]) && $_POST["submit"]=='Buscar'){
 				<b>Dedicaci&oacute;n:</b> $jobs->employeetype <br />
 				<b>Fecha:</b> $jobs->dateposted <br />
 				<b>Cierre:</b> $jobs->dateclosing </p>";
-		echo "<a href=\"jobdetails.php?jobid=$jobs->jobid\" target=\"_blank\"><img src=\"images/button_view.png\" alt=\"Ver busqueda\" border=\"0\" width=\"16\" height=\"16\"/>M&aacute;s Informaci&oacute;n/Postularse</a></td></tr>";
+		echo "<a href=\"jobdetails.php?jobid=$jobs->jobid\"><img src=\"images/button_view.png\" alt=\"Ver busqueda\" border=\"0\" width=\"16\" height=\"16\"/>M&aacute;s Informaci&oacute;n/Postularse</a></td></tr>";
 	}
 	echo "</tbody></table>";
 
