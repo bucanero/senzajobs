@@ -201,68 +201,6 @@ function leftmenu(){
 	return $linkarr;
 }
 
-function navigationtop(){
-	global $rowsPerPage,$pageNum,$offset;
-	$rowsPerPage = 20; // how many rows to show per page
-	$pageNum = 1; // by default we show first page
-	// if $_GET['page'] defined, use it as page number
-	if(isset($_GET['page']))
-	{
-		$pageNum = $_GET['page'];
-	}
-	$offset = ($pageNum - 1) * $rowsPerPage; // counting the offset
-}
-
-function navigationbottom(){
-	global $conn,$rowsPerPage,$pageNum;
-	// how many rows we have in database
-	$query   = "SELECT COUNT(sharesid) AS numrows FROM coop_shares";
-	$result  = query($query,$conn) or die('Error, query failed');
-	$row     = fetch_array($result, MYSQL_ASSOC);
-	$numrows = $row['numrows'];
-	
-	// how many pages we have when using paging?
-	$maxPage = ceil($numrows/$rowsPerPage);
-	
-	$self = $_SERVER['PHP_SELF'];
-	
-	// creating 'previous' and 'next' link
-	// plus 'first page' and 'last page' link
-	
-	// print 'previous' link only if we're not
-	// on page one
-	if ($pageNum > 1)
-	{
-		$page = $pageNum - 1;
-		$prev = " <a href=\"$self?page=$page\"><img src=\"images/prev.gif\" width=\"16\" height=\"16\" border=\"0\"></a> ";
-		
-		$first = " <a href=\"$self?page=1\"><img src=\"images/first.gif\" width=\"16\" height=\"16\" border=0></a> ";
-	} 
-	else
-	{
-		$prev  = ' <img src="images/prevdisab.gif" width="16" height="16"> ';       // we're on page one, don't enable 'previous' link
-		$first = ' <img src="images/firstdisab.gif" width="16" height="16"> '; // nor 'first page' link
-	}
-	
-	// print 'next' link only if we're not
-	// on the last page
-	if ($pageNum < $maxPage)
-	{
-		$page = $pageNum + 1;
-		$next = " <a href=\"$self?page=$page\"><img src=\"images/next.gif\" width=\"16\" height=\"16\" border=0></a> ";
-		
-		$last = " <a href=\"$self?page=$maxPage\"><img src=\"images/last.gif\" width=\"16\" height=\"16\" border=0></a> ";
-	} 
-	else
-	{
-		$next = ' <img src="images/nextdisab.gif" width="16" height="16"> ';      // we're on the last page, don't enable 'next' link
-		$last = ' <img src="images/lastdisab.gif" width="16" height="16"> '; // nor 'last page' link
-	}
-	
-	// print the page navigation link
-	echo $first . $prev . " Showing page <strong>$pageNum</strong> of <strong>$maxPage</strong> pages " . $next . $last;
-}
-
 function footer(){
 	echo "Copyright &copy; ". date("Y");
 }
@@ -337,6 +275,15 @@ function UserExists($usrname) {
 
 function EmailExists($email) {
 	$sql="SELECT email FROM users WHERE email='$email'";
+	return (dbRowExists($sql));
+}
+
+function isEmployerAllowedView($empid, $appid) {
+	$sql="SELECT a.id FROM applications a, job j, employer e 
+			WHERE 	applicantid = $appid 
+				AND a.jobid = j.jobid
+				AND j.employerid = e.employerid
+				AND e.employerid = $empid";
 	return (dbRowExists($sql));
 }
 

@@ -14,38 +14,121 @@ include_once('includes/queryfunctions.php');
 include_once('includes/functions.php');
 $conn = db_connect();
 
+function getApplicant($appid) {
+	global $conn;
+	$sql="SELECT applicant.id,applicant.cvviews,applicant.applicantid,concat_ws(' ',salutation,applicant.fname,applicant.mname,applicant.surname) AS applicant,
+			applicant.sex,applicant.mstatus,applicant.dob,applicant.hbox,applicant.htown,
+			applicant.hzip_postal,applicant.hcountry,applicant.hphone,applicant.hmobile,applicant.hemail,applicant.obox,
+			applicant.otown,applicant.ozip_postal,applicant.ocountry,applicant.ophone,applicant.omobile, applicant.oemail,applicant.qualsumm, applicant.driverlic, applicant.tipodoc, applicant.documento,
+	    country.country AS ctoforigin,nationality.country AS nationality,citizenship.country AS citizenship, dircountry.country AS chomeadd
+		FROM applicant
+			Left Join countries AS country ON applicant.ctoforigin = country.countryid
+			Left Join countries AS nationality ON applicant.nationality = nationality.countryid
+			Left Join countries AS citizenship ON applicant.citizenship = citizenship.countryid
+			Left Join countries AS dircountry ON applicant.hcountry = dircountry.countryid
+		WHERE applicant.applicantid = $appid";
+	$results=query($sql,$conn);
+	return (fetch_object($results));
+}
+
+function getEducation($appid) {
+	global $conn;
+   	$querystr="SELECT education.id,education.applicantid,education.highestlevel,education.award,
+		education.fieldofstudy,education.institution,education.city,education.yearofgraduation,countries.country, degree.degree
+	FROM education
+		Left Join countries ON education.countryid = countries.countryid
+		LEFT JOIN degree ON education.awardcategory = degree.id
+	WHERE education.applicantid =  $appid
+	ORDER BY yearofgraduation ASC";
+	return (query($querystr,$conn));
+}
+
+function getProfExp($appid) {
+	global $conn;
+   	$querystr="SELECT id,applicantid,organization,startmonth,startyear,endmonth,endyear,startsalarymonth,
+			currentsalarymonth,jobtitle,manager_supervisor,duties_responsibilities
+		FROM experience
+		WHERE experience.applicantid =  $appid
+		ORDER BY startyear, startmonth ASC";
+	return (query($querystr,$conn));
+}
+
+function getWorkshop($appid) {
+	global $conn;
+   	$querystr="SELECT id,trainingtitle,provider,description,startdate,enddate FROM training WHERE training.applicantid = $appid
+	ORDER BY startdate ASC";
+	return (query($querystr,$conn));
+}
+
+function getPublication($appid) {
+	global $conn;
+   	$querystr="SELECT id,ptitle,pdate,description
+		FROM publication
+		WHERE publication.applicantid =  $appid
+		ORDER BY pdate ASC";
+	return (query($querystr,$conn));
+}
+
+function getLanguage($appid) {
+	global $conn;
+	$querystr="SELECT id,applicantid,language,orallevel,writtenlevel
+		FROM language
+		WHERE language.applicantid =  $appid
+		ORDER BY language ASC";
+	return (query($querystr,$conn));
+}
+
+function getInformatica($appid) {
+	global $conn;
+	$querystr="SELECT id,applicantid,computacion,nivel
+		FROM informatica
+		WHERE informatica.applicantid =  $appid
+		ORDER BY computacion ASC";
+	return (query($querystr,$conn));
+}
+
+function getGroup($appid) {
+	global $conn;
+   	$querystr="SELECT id,applicantid,association,title_role,membersince
+		FROM professional
+		WHERE professional.applicantid =  $appid
+		ORDER BY membersince ASC";
+	return (query($querystr,$conn));
+}
+
+function getReferal($appid) {
+	global $conn;
+	$querystr="SELECT name,refposition,organization,telephone,email FROM referee 
+		WHERE applicantid = $appid
+		ORDER BY name ASC";
+	return (query($querystr,$conn));
+}
+
+function getAttach($appid) {
+	global $conn;
+	$querystr="SELECT id,blobtitle,filename, LENGTH(blobdata) AS blobsize FROM attachment
+		WHERE attachment.applicantid = $appid
+		ORDER BY filename ASC";
+	return (query($querystr,$conn));
+}
+
+
 if(isset($_GET["applicant"])){
 	SignedInEmployer();
 
 	$cvid = $_GET["applicant"];
-	if (!isAdmin()) {
-		$sql="SELECT a.id FROM applications a, job j, employer e 
-				WHERE 	applicantid=$cvid 
-					AND a.jobid = j.jobid
-					AND j.employerid = e.employerid
-					AND e.employerid = ". $_SESSION["userid"];
-		if (!dbRowExists($sql))
-			die("FORBIDDEN");
+	if (!isAdmin() && !isEmployerAllowedView($_SESSION["userid"], $cvid)) {
+		header('HTTP/1.0 403 Forbidden');
+		exit();
 	}
+
 }else{
 	//check if user is logged in
 	SignedIn();
 	$cvid = $_SESSION["userid"];
 }
 
-$sql="SELECT applicant.id,applicant.cvviews,applicant.applicantid,concat_ws(' ',salutation,applicant.fname,applicant.mname,applicant.surname) AS applicant,
-		applicant.sex,applicant.mstatus,applicant.dob,applicant.hbox,applicant.htown,
-		applicant.hzip_postal,applicant.hcountry,applicant.hphone,applicant.hmobile,applicant.hemail,applicant.obox,
-		applicant.otown,applicant.ozip_postal,applicant.ocountry,applicant.ophone,applicant.omobile, applicant.oemail,applicant.qualsumm, applicant.driverlic, applicant.tipodoc, applicant.documento,
-    country.country AS ctoforigin,nationality.country AS nationality,citizenship.country AS citizenship, dircountry.country AS chomeadd
-	FROM applicant
-		Left Join countries AS country ON applicant.ctoforigin = country.countryid
-		Left Join countries AS nationality ON applicant.nationality = nationality.countryid
-		Left Join countries AS citizenship ON applicant.citizenship = citizenship.countryid
-		Left Join countries AS dircountry ON applicant.hcountry = dircountry.countryid
-	WHERE applicant.applicantid = $cvid";
-$results=query($sql,$conn);
-$applicant = fetch_object($results);
+$applicant = getApplicant($cvid);
 
 //update cv views - if applicant do not update the cvviews.
 if (isEmployer()) {
@@ -116,7 +199,7 @@ if (isEmployer()) {
 	$results=query($querystr,$conn);
 	$careerobj = fetch_object($results);
 	echo wordwrap($careerobj->objective,100,'<br />');
-	free_result(results);
+	free_result($results);
    ?>
    </td>
  </tr>
@@ -124,14 +207,7 @@ if (isEmployer()) {
    <th colspan="2">Estudios</th>
  </tr>
  <?php
-   	$querystr="SELECT education.id,education.applicantid,education.highestlevel,education.award,
-		education.fieldofstudy,education.institution,education.city,education.yearofgraduation,countries.country, degree.degree
-	FROM education
-		Left Join countries ON education.countryid = countries.countryid
-		LEFT JOIN degree ON education.awardcategory = degree.id
-	WHERE education.applicantid =  $cvid
-	ORDER BY yearofgraduation ASC";
-	$results=query($querystr,$conn);	
+ 	$results = getEducation($cvid);
 	while ($education = fetch_object($results)){
 	 echo "<tr align=\"center\">
       <td align=\"left\" valign=\"top\" class=\"boldtext\">$education->yearofgraduation</td>
@@ -141,19 +217,13 @@ if (isEmployer()) {
 			</td>
 	   </tr>";
 	}
-	free_result(results);
+	free_result($results);
 ?>
  <tr align="center">
    <th colspan="2">Experiencia Profesional</th>
  </tr>
    <?php
-   	$querystr="SELECT id,applicantid,organization,startmonth,startyear,endmonth,endyear,startsalarymonth,
-			currentsalarymonth,jobtitle,manager_supervisor,duties_responsibilities
-		FROM experience
-		WHERE experience.applicantid =  $cvid
-		ORDER BY startyear, startmonth ASC";
-	$results=query($querystr,$conn);
-	
+	$results = getProfExp($cvid);
 	while ($profexp = fetch_object($results)){
 	$manager_supervisor = ($profexp->manager_supervisor == '1') ? '(Gerencia/Supervisi&oacute;n)' : '';
 	$fechafin = ($profexp->endmonth == '0') ? 'Actualidad' : "$profexp->endmonth/$profexp->endyear";
@@ -172,15 +242,13 @@ if (isEmployer()) {
 		stripslashes($profexp->duties_responsibilities);
 	 echo "</td></tr>";
 	}
-	free_result(results);
+	free_result($results);
 ?>
  <tr align="center">
    <th colspan="2">Cursos/Workshops</th>
  </tr>
  <?php
-   	$querystr="SELECT id,trainingtitle,provider,description,startdate,enddate FROM training WHERE training.applicantid = $cvid
-	ORDER BY startdate ASC";
-	$results=query($querystr,$conn);	
+ 	$results = getWorkshop($cvid);
 	while ($training = fetch_object($results)){
 	 echo "<tr align=\"center\">
       <td align=\"left\" valign=\"top\" class=\"boldtext\">$training->startdate - $training->enddate</td>
@@ -189,18 +257,13 @@ if (isEmployer()) {
 			".wordwrap($training->description,100,'<br/>')."</td>
 	   </tr>";
 	}
-	free_result(results);
+	free_result($results);
 ?>
  <tr align="center">
    <th colspan="2">Publicaciones</th>
  </tr>
  <?php
-   	$querystr="SELECT id,ptitle,pdate,description
-		FROM publication
-		WHERE publication.applicantid =  $cvid
-		ORDER BY pdate ASC";
-	$results=query($querystr,$conn);
-	
+	$results = getPublication($cvid);
 	while ($publication = fetch_object($results)){
 	 echo "<tr align=\"center\">
       <td align=\"left\" valign=\"top\" class=\"boldtext\">Fecha de Publicacion:</td>
@@ -211,7 +274,7 @@ if (isEmployer()) {
 	  <td align=\"left\">".wordwrap($publication->ptitle,100,'<br/>')."<br><br>".wordwrap($publication->description,100,'<br/>')."</td>
 	  </tr>";
 	}
-	free_result(results);
+	free_result($results);
 ?>
  <tr align="center">
    <th colspan="2">Idiomas</th>
@@ -219,12 +282,7 @@ if (isEmployer()) {
  <tr align="center">
    <td colspan="2">
    <?php 
-	$querystr="SELECT id,applicantid,language,orallevel,writtenlevel
-		FROM language
-		WHERE language.applicantid =  $cvid
-		ORDER BY language ASC";
-	$results=query($querystr,$conn);
-	//check if data is returned
+	$results = getLanguage($cvid);
 	echo "<table border=\"0\" width=\"100%\">";  		
 	echo "<tr class=\"boldtext\"><td></td><td>Nivel Oral</td><td>Nivel Escrito</td></tr>";
 	while ($lang = fetch_object($results)){
@@ -250,12 +308,7 @@ if (isEmployer()) {
  <tr align="center">
    <td colspan="2">
    <?php 
-	$querystr="SELECT id,applicantid,computacion,nivel
-		FROM informatica
-		WHERE informatica.applicantid =  $cvid
-		ORDER BY computacion ASC";
-	$results=query($querystr,$conn);
-	//check if data is returned
+	$results = getInformatica($cvid);
 	echo "<table border=\"0\" width=\"100%\">";  		
 	echo "<tr class=\"boldtext\"><td></td><td>Nivel</td></tr>";
 	while ($lang = fetch_object($results)){
@@ -278,12 +331,7 @@ if (isEmployer()) {
    <th colspan="2">Grupos y Asociaciones</th>
  </tr>
    <?php
-   	$querystr="SELECT id,applicantid,association,title_role,membersince
-		FROM professional
-		WHERE professional.applicantid =  $cvid
-		ORDER BY membersince ASC";
-	$results=query($querystr,$conn);
-	
+	$results = getGroup($cvid);
 	while ($profmem = fetch_object($results)){
 	 echo "<tr align=\"center\">
       <td align=\"left\" valign=\"top\" class=\"boldtext\">Organizaci&oacute;n</td>
@@ -294,7 +342,7 @@ if (isEmployer()) {
 	  <td align=\"left\">$profmem->membersince<br>$profmem->title_role</td>
 	  </tr>";
 	}
-	free_result(results);
+	free_result($results);
 ?>
  <tr align="center">
    <th colspan="2">Referencias</th>
@@ -302,9 +350,7 @@ if (isEmployer()) {
   <tr align="center">
    <td align="left" colspan="2">
    <?php
-	$querystr="SELECT name,refposition,organization,telephone,email FROM referee 
-		WHERE applicantid = $cvid ORDER BY name ASC";
-	$results=query($querystr,$conn);
+    $results = getReferal($cvid);
 	while ($referee = fetch_object($results)){
 			echo "<p>
 				<b>$referee->name</b><br>
@@ -325,10 +371,7 @@ if (isEmployer()) {
  <tr align="center">
    <td colspan="2">
    <?php
-	$querystr="SELECT id,blobtitle,filename, LENGTH(blobdata) AS blobsize FROM attachment
-		WHERE attachment.applicantid =  $cvid
-		ORDER BY filename ASC";
-	$results=query($querystr,$conn);
+    $results = getAttach($cvid);
 	echo "<table border=\"0\" width=\"100%\">";  		
 	echo "<tr class=\"boldtext\"><td>Archivo</td><td>Tama&ntilde;o</td><td>Descripci&oacute;n</td></tr>";
 	while ($ref = fetch_object($results)){
