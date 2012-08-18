@@ -42,7 +42,7 @@ if(isset($_POST["submit"]) && $_POST["submit"]=='Buscar'){
 
 ?>
 
-<?php ShowHeader(WEBSITE_NAME); ?>
+<?php ShowHeader(WEBSITE_NAME." :: B&uacute;squedas"); ?>
 
 <?php ShowDropMenu(); ?>
 
