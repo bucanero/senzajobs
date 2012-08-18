@@ -73,15 +73,23 @@ function SignedIn() {
 		die("<center><font color=red>You have not yet Logged in.<a href=\"index.php\">Please click here to log in.</a></font><center>");
 }
 
+function isAdmin() {
+	return ($_SESSION["admin"] == 1);
+}
+
+function isEmployer(){
+	return ($_SESSION["usercategory"] == 'E');
+}
+
 function SignedInAdmin() {
 	SignedIn();
-	if($_SESSION["admin"] != 1)
+	if(!isAdmin())
 		die("<center><font color=red>You have not yet Logged in.<a href=\"index.php\">Please click here to log in.</a></font><center>");
 }
 
 function SignedInEmployer() {
 	SignedIn();
-	if($_SESSION["usercategory"] != 'E')
+	if (!isEmployer())
 		die("<center><font color=red>You have not yet Logged in.<a href=\"index.php\">Please click here to log in.</a></font><center>");
 }
 
