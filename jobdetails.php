@@ -51,7 +51,7 @@ $jobs = fetch_object($results);
 $today = getdate();
 ?>
 
-<?php ShowHeader(WEBSITE_NAME ." :: Nosotros"); ?>
+<?php ShowHeader(WEBSITE_NAME ." :: B&uacute;squeda laboral"); ?>
 
 <?php ShowDropMenu(); ?>
 
