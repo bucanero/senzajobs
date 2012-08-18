@@ -15,13 +15,23 @@ include_once('includes/functions.php');
 $conn = db_connect();
 
 if(isset($_GET["applicant"])){
+	SignedInEmployer();
+
 	$cvid = $_GET["applicant"];
+	if (!isAdmin()) {
+		$sql="SELECT a.id FROM applications a, job j, employer e 
+				WHERE 	applicantid=$cvid 
+					AND a.jobid = j.jobid
+					AND j.employerid = e.employerid
+					AND e.employerid = ". $_SESSION["userid"];
+		if (!dbRowExists($sql))
+			die("FORBIDDEN");
+	}
 }else{
+	//check if user is logged in
+	SignedIn();
 	$cvid = $_SESSION["userid"];
 }
-
-//check if user is logged in
-SignedIn();
 
 $sql="SELECT applicant.id,applicant.cvviews,applicant.applicantid,concat_ws(' ',salutation,applicant.fname,applicant.mname,applicant.surname) AS applicant,
 		applicant.sex,applicant.mstatus,applicant.dob,applicant.hbox,applicant.htown,
@@ -38,9 +48,11 @@ $results=query($sql,$conn);
 $applicant = fetch_object($results);
 
 //update cv views - if applicant do not update the cvviews.
-$sql="UPDATE applicant SET cvviews=$applicant->cvviews+1 WHERE applicantid=$cvid";
-$viewresults=query($sql,$conn);
-free_result($viewresults);
+if (isEmployer()) {
+	$sql="UPDATE applicant SET cvviews=$applicant->cvviews+1 WHERE applicantid=$cvid";
+	$viewresults=query($sql,$conn);
+	free_result($viewresults);
+}
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -53,7 +65,6 @@ free_result($viewresults);
 <?php headericon(); ?>
 </head>
 <body>
-<form action="viewcv.php" method="POST"  name="viewcv" id="viewcv" enctype="multipart/form-data">
 <div align="center">
 <table>
  <tr align="center">
@@ -224,7 +235,7 @@ free_result($viewresults);
 		}else{
 			echo "<tr id=\"row$j\" onmouseover=\"javascript:setColor('$j')\" onmouseout=\"javascript:origColor('$j')\" bgcolor=\"#EEEEF8\">";
 		}	  
-			echo "<td align=\"left\"><input name=\"id\" type=\"hidden\" value=\"$lang->id\">$lang->language</td>
+			echo "<td align=\"left\">$lang->language</td>
 				<td align=\"left\">$lang->orallevel</td>
 				<td align=\"left\">$lang->writtenlevel</td>
 			</tr>";
@@ -255,7 +266,7 @@ free_result($viewresults);
 		}else{
 			echo "<tr id=\"row$j\" onmouseover=\"javascript:setColor('$j')\" onmouseout=\"javascript:origColor('$j')\" bgcolor=\"#EEEEF8\">";
 		}	  
-			echo "<td align=\"left\"><input name=\"id\" type=\"hidden\" value=\"$lang->id\">$lang->computacion</td>
+			echo "<td align=\"left\">$lang->computacion</td>
 				<td align=\"left\">$lang->nivel</td>
 			</tr>";
 	}
@@ -344,6 +355,5 @@ free_result($viewresults);
  </tr>  
 </table>
 </div>
-</form>
 </body>
 </html>
