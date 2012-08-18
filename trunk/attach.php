@@ -88,13 +88,15 @@ if(isset($_POST["submit"])){
 		$attachment = fetch_object($results);
 		
 		if (isEmployer()) {
-			if (!isAdmin() && !isEmployerAllowedView($_SESSION["userid"], $attachment->applicantid))
+			if (!isAdmin() && !isEmployerAllowedView($_SESSION["userid"], $attachment->applicantid)) {
 				header('HTTP/1.0 403 Forbidden');
 				exit();
+			}
 		} else {
-			if ($_SESSION["userid"] != $attachment->applicantid)
+			if ($_SESSION["userid"] != $attachment->applicantid) {
 				header('HTTP/1.0 403 Forbidden');
 				exit();
+			}
 		}
 	
   		header("Content-type: $attachment->blobtype");
