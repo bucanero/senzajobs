@@ -82,10 +82,20 @@ if(isset($_POST["submit"])){
 		$attachment = fetch_object($results);
 		break;
 	case "Download":
-		$sql = "SELECT blobdata,blobtype,blobtitle,filename,LENGTH(blobdata) as blobsize FROM attachment WHERE id=$id"; // AND applicantid=$_SESSION[userid]";
+		$sql = "SELECT applicantid,blobdata,blobtype,blobtitle,filename,LENGTH(blobdata) as blobsize FROM attachment WHERE id=$id";
 		
 		$results=query($sql,$conn);
 		$attachment = fetch_object($results);
+		
+		if (isEmployer()) {
+			if (!isAdmin() && !isEmployerAllowedView($_SESSION["userid"], $attachment->applicantid))
+				header('HTTP/1.0 403 Forbidden');
+				exit();
+		} else {
+			if ($_SESSION["userid"] != $attachment->applicantid)
+				header('HTTP/1.0 403 Forbidden');
+				exit();
+		}
 	
   		header("Content-type: $attachment->blobtype");
   		header("Content-length: $attachment->blobsize");
