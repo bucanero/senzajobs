@@ -81,16 +81,32 @@ function isEmployer(){
 	return ($_SESSION["usercategory"] == 'E');
 }
 
+function isApplicant(){
+	return ($_SESSION["usercategory"] == 'A');
+}
+
 function SignedInAdmin() {
 	SignedIn();
-	if(!isAdmin())
-		die("<center><font color=red>You have not yet Logged in.<a href=\"index.php\">Please click here to log in.</a></font><center>");
+	if(!isAdmin()) {
+		header('HTTP/1.0 403 Forbidden');
+		exit();
+	}
+}
+
+function SignedInUser() {
+	SignedIn();
+	if(!isApplicant()) {
+		header('HTTP/1.0 403 Forbidden');
+		exit();
+	}
 }
 
 function SignedInEmployer() {
 	SignedIn();
-	if (!isEmployer())
-		die("<center><font color=red>You have not yet Logged in.<a href=\"index.php\">Please click here to log in.</a></font><center>");
+	if (!isEmployer()) {
+		header('HTTP/1.0 403 Forbidden');
+		exit();
+	}
 }
 
 function LogOut() {
@@ -147,7 +163,7 @@ function GetUserOptions(){
     }
 	
 	if ($_SESSION["usercategory"]=='E'){
- 	 $linkarr[$i++] = "<a href=\"employer.php?search=$_SESSION[userid]\">Mis Datos</a>";
+ 	 $linkarr[$i++] = "<a href=\"employer.php\">Mis Datos</a>";
 	 $linkarr[$i++] = "<a href=\"jobs.php\">B&uacute;squedas Laborales</a>";
 	 $linkarr[$i++] = "<a href=\"applicants.php\">Mis Postulantes</a>";
     }
@@ -171,7 +187,7 @@ function leftmenu(){
 		switch ($_SESSION["usercategory"]){
 		case 'A':
 		 	//if applicant is logged in display this menu
-		    $linkarr[$i++] = "<a href=\"personaldata.php?search=$_SESSION[userid]\">Datos Personales</a>";
+		    $linkarr[$i++] = "<a href=\"personaldata.php\">Datos Personales</a>";
 			$linkarr[$i++] = "<a href=\"careerobjective.php\">Objetivos Laborales</a>";
 			$linkarr[$i++] = "<a href=\"qualsumm.php\">Resumen de Aptitudes</a>";
 			$linkarr[$i++] = "<a href=\"profexp.php\">Experiencia Profesional</a>";

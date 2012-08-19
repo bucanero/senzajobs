@@ -108,7 +108,7 @@ $today = getdate();
 </table>
 
 <?php
-if(isset($_SESSION["userid"]) && !isEmployer())
+if(isset($_SESSION["userid"]) && isApplicant())
 	echo '<input type="submit" name="submit" value="Postularse" class="button" />';
 else	
 	echo AddInformationBox('Para postularse online, por favor asegurese de estar <a href="register.php?member=A">registrado</a>.');
