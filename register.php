@@ -14,9 +14,6 @@ include_once('includes/queryfunctions.php');
 include_once('includes/functions.php');
 $conn = db_connect();
 
-//check if user has clicked on logout button
-if(isset($_POST["submit"]) && $_POST["submit"]=='Logout') LogOut();
-
 if(isset($_GET["action"])){
 	switch($_GET["action"]){
 	case "Activate":
@@ -51,6 +48,7 @@ if(isset($_POST["submit"])){
 //		$admin = !empty($_POST["admin"]) ? "'" . $_POST["admin"] . "'" : 'NULL';
 		$status = !empty($_POST["status"]) ? "'" . $_POST["status"] . "'" : "'D'";
 		$usercategory = $_POST["member"]=="E" ? "E" : "A";
+		$_GET["member"] = $_POST["member"];
 
 		// here we encrypt the password and add slashes if needed
 		if (!get_magic_quotes_gpc()) {
@@ -89,13 +87,12 @@ if(isset($_POST["submit"])){
 		$id = mysql_insert_id();
 		
 		//Update applicant or employer depending on registration.
-		if($results)
-		{
+		if($results) {
 			if($usercategory=='A'){
 				$sql="INSERT INTO applicant (applicantid,surname,mname,fname,hemail) VALUES($id,$sname,$mname,$fname,'$email')";
 				$results=query($sql,$conn);
 				$msg[0]="No se ha podido agregar el registro de usuario.";
-				$msg[1]="Registro de usuario agregado correctamente.";
+				$msg[1]="Profesional registrado correctamente.<br>Active su cuenta desde $email.";
 				$resmsg = GetResultMsg($results,$conn,$msg);
 			}
 			
@@ -103,17 +100,17 @@ if(isset($_POST["submit"])){
 				$sql="INSERT INTO employer (employerid,email,contact) VALUES($id,'$email','$contact')";
 				$results=query($sql,$conn);
 				$msg[0]="No se ha podido agregar el registro de empresa.";
-				$msg[1]="Registro de empresa agregado correctamente.";
+				$msg[1]="Empresa registrada correctamente.<br>Active su cuenta desde $email.";
 				$resmsg = GetResultMsg($results,$conn,$msg);
 			}
 		}
-		$commentinfo = "$contact,\n".
-			"Gracias por registrarse en ". WEBSITE_NAME .". Su usuario y clave de acceso se detallan a continuacion:".
-			"\n\n-------------------------------------------\n".
-			"Usuario: $loginname \n".
-			"Clave: $_POST[pass] \n\n\n".
-			"Por favor, active su cuenta haciendo click en el siguiente link:\n\n".
-			WEBSITE_URL ."/register.php?action=Activate&id=$id&code=". str_rot13(md5($_POST['pass'])) ."\n\n".
+		$commentinfo = "$contact,\n\n".
+			"Gracias por registrarse en ". WEBSITE_NAME .".\n".
+			"Su usuario y clave de acceso se detallan a continuacion:\n\n".
+			"Usuario: $email \n".
+			"Clave: ". $_POST['pass'] ."\n\n\n".
+			"Por favor, active su cuenta haciendo click en el siguiente enlace:\n\n".
+			WEBSITE_URL ."register.php?action=Activate&id=$id&code=". str_rot13(md5($_POST['pass'])) ."\n\n".
 			"Muchas gracias,\n\n".
 			WEBSITE_NAME ."\n".
 			"E-Mail: ". WEBSITE_EMAIL ."\n".
@@ -126,10 +123,10 @@ if(isset($_POST["submit"])){
 		$sql="UPDATE users SET fname=$fname,sname=$sname,loginname=$loginname,pass=$pass,email=$email,
 				dateregistered=$dateregistered,`status`=$status,usercategory=$usercategory
 			WHERE userid=$_POST[userid]";
-		$results=query($sql,$conn);
-		$msg[0]="No se ha podido actualizar el registro de usuario.";
-		$msg[1]="Registro de usuario actualizado correctamente.";
-		$resmsg = GetResultMsg($results,$conn,$msg);
+//		$results=query($sql,$conn);
+//		$msg[0]="No se ha podido actualizar el registro de usuario.";
+//		$msg[1]="Registro de usuario actualizado correctamente.";
+//		$resmsg = GetResultMsg($results,$conn,$msg);
 		break;
 	case "Delete":
 		$sql = "DELETE FROM users WHERE userid=$userid";
@@ -141,6 +138,7 @@ if(isset($_POST["submit"])){
 		break;
 	}
 }
+
 ?>
 
 <?php ShowHeader(WEBSITE_NAME ." :: Registrarse"); ?>
@@ -222,7 +220,7 @@ function loadHTMLPost(URL, destination, button){
 
 <div id="list">
 
-<h2 class="title-bar">Registrarse</h2>
+<h2 class="title-bar">Registrarse como <?php echo ($_GET["member"]=='E') ? "Empresa" : "Profesional"; ?></h2>
 
 <?php if (isset($resmsg)) echo $resmsg; ?>
 
