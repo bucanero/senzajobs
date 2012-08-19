@@ -15,17 +15,13 @@ include_once('includes/functions.php');
 $conn = db_connect();
 
 //check if user is logged in
-SignedIn();
-
-//check if user has clicked on logout button
-if(isset($_POST["submit"]) && $_POST["submit"]=='Logout') LogOut();
+SignedInUser();
 
 if(isset($_GET["search"]) && !empty($_GET["search"])){
 	//have this as a search function
 	$id=$_GET["search"];
 	$_POST["submit"]=$_GET["action"];
 }
-
 
 if(isset($_POST["submit"])){
 	if($_POST["submit"]=="Guardar" || $_POST["submit"]=="Actualizar"){
@@ -66,7 +62,7 @@ if(isset($_POST["submit"])){
 		header("Location: qualsumm.php");
 		break;
 	case "<<Anterior":
-		header("Location: personaldata.php?search=$_SESSION[userid]");
+		header("Location: personaldata.php");
 		break;		
 	}
 }

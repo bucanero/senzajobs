@@ -15,15 +15,12 @@ include_once('includes/functions.php');
 $conn = db_connect();
 
 //check if user is logged in
-SignedIn();
+SignedInUser();
+$applicantid=$_SESSION["userid"];
 
-//check if user has clicked on logout button
-if(isset($_POST["submit"]) && $_POST["submit"]=='Logout') LogOut();
-
-if(isset($_GET["search"]) && !empty($_GET["search"])){
+if(isset($_GET["search"]) && !empty($_GET["search"]) && isAdmin()){
 	//have this as a search function
 	$applicantid=$_GET["search"];
-	$_POST["submit"]="Find";
 }
 
 if(isset($_POST["submit"])){
@@ -83,18 +80,17 @@ if(isset($_POST["submit"])){
 		$msg[0]="No se ha podido actualizar el registro.";
 		$msg[1]="Registro actualizado correctamente.";
 		$resmsg = GetResultMsg($results,$conn,$msg);
-		header("Location: personaldata.php?search=$applicantid");
-		break;
-	case "Find":
-		$sql = "SELECT * FROM applicant	WHERE applicantid=$applicantid";
-		$results=query($sql,$conn);
-		$applicant = fetch_object($results);		
 		break;
 	case "Siguiente>>":
 		header("Location: careerobjective.php");
 		break;				
 	}
 }
+
+$sql = "SELECT * FROM applicant	WHERE applicantid=$applicantid";
+$results=query($sql,$conn);
+$applicant = fetch_object($results);
+
 ?>
 
 <?php ShowHeader(WEBSITE_NAME ." :: Datos Personales"); ?>
@@ -346,7 +342,7 @@ function validateOnSubmit() {
       
     </tr>
     <tr align="center">
-      <td colspan="2"><input type="submit" name="submit" value="<?php echo ($_GET["action"]=="Find" || isset($_GET["search"])) ? "Actualizar" : "Guardar"; ?>" onclick="return validateOnSubmit();" class="button"/>
+      <td colspan="2"><input type="submit" name="submit" value="Actualizar" onclick="return validateOnSubmit();" class="button"/>
         <input type="submit" name="submit" value="Siguiente&gt;&gt;" class="button" onClick="return confirm('Desea continuar sin guardar los cambios?','Confirmar Continuar');" />
 		</td>
     </tr>

@@ -15,10 +15,8 @@ include_once('includes/functions.php');
 $conn = db_connect();
 
 //check if user is logged in
-SignedIn();
+SignedInUser();
 
-//check if user has clicked on logout button
-if(isset($_POST["submit"]) && $_POST["submit"]=='Logout') LogOut();
 ?>
 
 <?php ShowHeader(WEBSITE_NAME ." :: Editar mi CV"); ?>
@@ -46,7 +44,7 @@ Por favor compruebe que todos los campos <strong>obligatorios</strong> hayan sid
 		
 <table border="0">
     <tr>
-      <td><a href="personaldata.php?search=<?php echo $_SESSION[userid]; ?>">Datos Personales</a> </td>
+      <td><a href="personaldata.php">Datos Personales</a> </td>
       <td><b>Obligatorio</b></td>
       <td><?php ShowCvStatus('applicant', 'hbox'); ?></td>
       

@@ -17,9 +17,6 @@ $conn = db_connect();
 //check if user is logged in
 SignedInEmployer();
 
-//check if user has clicked on logout button
-if(isset($_POST["submit"]) && $_POST["submit"]=='Logout') LogOut();
-
 if(isset($_GET["search"]) && !empty($_GET["search"])){
 	$jobid=$_GET["search"];
 	$_POST["submit"]=$_GET["action"];
